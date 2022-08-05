@@ -14,6 +14,5 @@ namespace ScriptableObjects
 }
 
 // TODO: On GameOver screen show the current score and the highest score and tell user if the current is his highest
-// TODO: Implement highest score
 // TODO: Implement pooling
 // TODO: Implement blade slicing

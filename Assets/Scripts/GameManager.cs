@@ -7,6 +7,7 @@ using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
+    private const string HighestScoreKey = "highestScore";
     [SerializeField] private List<GameObject> targets;
     [SerializeField] private float minSpawnRate;
     [SerializeField] private float maxSpawnRate;
@@ -18,6 +19,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI gameOverText;
     [SerializeField] private Button restartButton;
     [SerializeField] private GameObject titleScreen;
+    private int _highestScore;
 
     private int _lives;
     private int _score;
@@ -26,6 +28,12 @@ public class GameManager : MonoBehaviour
     public bool GameIsPaused { get; private set; }
     public bool GameIsActive { get; private set; }
 
+    private void Start()
+    {
+        _highestScore = PlayerPrefs.GetInt(HighestScoreKey, 0);
+        Debug.Log($"Highest score: {_highestScore}");
+    }
+
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.Space)) GameIsPaused = !GameIsPaused;
@@ -33,18 +41,24 @@ public class GameManager : MonoBehaviour
         Time.timeScale = GameIsPaused ? 0 : 1;
     }
 
+    private void OnApplicationQuit()
+    {
+        UpdateHighestScore();
+    }
+
     public void StartGame(DifficultyButton.Difficulty difficulty)
     {
         maxSpawnRate /= (float)difficulty;
         minSpawnRate /= (float)difficulty;
         _scoreMultiplier = GetScoreMultiplier(difficulty);
+
         _score = 0;
         _lives = maxLives;
         GameIsActive = true;
         titleScreen.gameObject.SetActive(false);
 
         StartCoroutine(SpawnTargets());
-        UpdateScore(0);
+        UpdateScore(_score);
 
         scoreText.gameObject.SetActive(true);
         livesText.gameObject.SetActive(true);
@@ -67,6 +81,13 @@ public class GameManager : MonoBehaviour
     public void RestartGame()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
+
+    private void UpdateHighestScore()
+    {
+        if (_score <= _highestScore) return;
+        _highestScore = _score;
+        PlayerPrefs.SetInt(HighestScoreKey, _highestScore);
     }
 
     private static int GetScoreMultiplier(DifficultyButton.Difficulty difficulty)
@@ -106,6 +127,7 @@ public class GameManager : MonoBehaviour
         scoreText.gameObject.SetActive(false);
         livesText.gameObject.SetActive(false);
         GameIsActive = false;
+        UpdateHighestScore();
     }
 
     private IEnumerator SpawnTargets()
