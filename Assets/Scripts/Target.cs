@@ -33,15 +33,16 @@ public class Target : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (!other.CompareTag("Sensor")) return;
+        if (!other.CompareTag("Sensor"))
+            return;
         Destroy(gameObject);
 
-        if (!gameObject.CompareTag("Bad")) _gameManager.GameOver();
+        if (!gameObject.CompareTag("Bad")) _gameManager.DeductLive();
     }
 
     private void OnPlayerHitTarget()
     {
-        if (!_gameManager.GameIsActive) return;
+        if (_gameManager.GameIsPaused || !_gameManager.GameIsActive) return;
 
         Destroy(gameObject);
         Instantiate(explosionParticle, transform.position, explosionParticle.transform.rotation);
