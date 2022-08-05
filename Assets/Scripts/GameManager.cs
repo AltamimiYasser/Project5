@@ -15,12 +15,14 @@ public class GameManager : MonoBehaviour
 
     [SerializeField] private TextMeshProUGUI scoreText;
     [SerializeField] private TextMeshProUGUI livesText;
-
+    [SerializeField] private TextMeshProUGUI highestScoreText;
+    [SerializeField] private TextMeshProUGUI newHighestScore;
     [SerializeField] private TextMeshProUGUI gameOverText;
+
     [SerializeField] private Button restartButton;
     [SerializeField] private GameObject titleScreen;
-    private int _highestScore;
 
+    private int _highestScore;
     private int _lives;
     private int _score;
     private int _scoreMultiplier;
@@ -31,7 +33,7 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         _highestScore = PlayerPrefs.GetInt(HighestScoreKey, 0);
-        Debug.Log($"Highest score: {_highestScore}");
+        highestScoreText.text = $"Highest Score: {_highestScore}";
     }
 
     private void Update()
@@ -127,6 +129,13 @@ public class GameManager : MonoBehaviour
         scoreText.gameObject.SetActive(false);
         livesText.gameObject.SetActive(false);
         GameIsActive = false;
+
+        if (_score > _highestScore)
+        {
+            newHighestScore.text = $"New High Score: {_score}";
+            newHighestScore.gameObject.SetActive(true);
+        }
+
         UpdateHighestScore();
     }
 
