@@ -12,3 +12,4 @@ namespace ScriptableObjects
         public float ySpawnPosition = -6;
     }
 }
+// TODO: Implement highest score
