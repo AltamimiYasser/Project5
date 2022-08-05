@@ -21,8 +21,9 @@ public class GameManager : MonoBehaviour
 
     private int _lives;
     private int _score;
-    public bool GameIsPaused { get; private set; }
+    private int _scoreMultiplier;
 
+    public bool GameIsPaused { get; private set; }
     public bool GameIsActive { get; private set; }
 
     private void Update()
@@ -36,6 +37,7 @@ public class GameManager : MonoBehaviour
     {
         maxSpawnRate /= (float)difficulty;
         minSpawnRate /= (float)difficulty;
+        _scoreMultiplier = GetScoreMultiplier(difficulty);
         _score = 0;
         _lives = maxLives;
         GameIsActive = true;
@@ -50,7 +52,7 @@ public class GameManager : MonoBehaviour
 
     public void UpdateScore(int scoreToAdd)
     {
-        _score += scoreToAdd;
+        _score += scoreToAdd * _scoreMultiplier;
         scoreText.text = _score.ToString();
     }
 
@@ -65,6 +67,18 @@ public class GameManager : MonoBehaviour
     public void RestartGame()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
+
+    private static int GetScoreMultiplier(DifficultyButton.Difficulty difficulty)
+    {
+        var difficultyValue = (int)difficulty;
+
+        return difficultyValue switch
+        {
+            1 => 1,
+            2 => 2,
+            _ => 3
+        };
     }
 
     private Color GetLivesColor()
