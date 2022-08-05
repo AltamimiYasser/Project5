@@ -13,3 +13,5 @@ namespace ScriptableObjects
     }
 }
 // TODO: Implement highest score
+// TODO: Implement booling
+// TODO: Implement blade slicing
