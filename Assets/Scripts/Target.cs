@@ -26,18 +26,10 @@ public class Target : MonoBehaviour
         _gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
     }
 
-    private void OnMouseDown()
-    {
-        OnPlayerHitTarget();
-    }
-
     private void OnTriggerEnter(Collider other)
     {
-        if (!other.CompareTag("Sensor"))
-            return;
-        Destroy(gameObject);
-
-        if (!gameObject.CompareTag("Bad")) _gameManager.DeductLive();
+        if (other.CompareTag("Mouse")) OnPlayerHitTarget();
+        if (other.CompareTag("Sensor")) ManageTargetWasNotHit();
     }
 
     private void OnPlayerHitTarget()
@@ -47,6 +39,13 @@ public class Target : MonoBehaviour
         Destroy(gameObject);
         Instantiate(explosionParticle, transform.position, explosionParticle.transform.rotation);
         _gameManager.UpdateScore(pointValue);
+    }
+
+    private void ManageTargetWasNotHit()
+    {
+        Destroy(gameObject);
+
+        if (!gameObject.CompareTag("Bad")) _gameManager.DeductLive();
     }
 
     private Vector3 GetRandomForce()

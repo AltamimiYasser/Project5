@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Bad
   - Sensor
+  - Mouse
   layers:
   - Default
   - TransparentFX
