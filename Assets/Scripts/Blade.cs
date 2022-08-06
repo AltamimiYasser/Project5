@@ -3,10 +3,11 @@ using UnityEngine;
 public class Blade : MonoBehaviour
 {
     [SerializeField] private GameObject bladeTrailPrefab;
-
     private Camera _cam;
     private GameObject _currentBladeTrail;
+
     private GameManager _gameManager;
+
     private bool _isCutting;
     private Rigidbody2D _rigidbody;
 

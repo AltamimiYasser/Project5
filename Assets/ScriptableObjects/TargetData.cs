@@ -14,3 +14,4 @@ namespace ScriptableObjects
 }
 
 // TODO: Implement pooling
+// TODO: Add SFX when using blade
